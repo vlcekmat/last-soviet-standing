@@ -35,8 +35,15 @@ public class MathModule : MonoBehaviour
         }
 
         else
-        {
-            return 0;
+        {   
+            if (a >= 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 180;
+            }
         }
     }
 }
