@@ -5,13 +5,22 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
+    // stats
+    public float shootingCooldown = 1f;
+
+    // state
+    public bool canShoot = true;
+
+    // component references
     Rigidbody2D rb;
-    Animator animator;
+    Animator playerAnimator;
+    [SerializeField] Animator flashAnimator;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -29,6 +38,19 @@ public class Player : MonoBehaviour
 
     public void Shoot()
     {
-        animator.SetTrigger("Shoot");
+        if(canShoot)
+        {   
+            StartCoroutine(StartShootingCooldown());
+            flashAnimator.gameObject.GetComponent<AudioSource>().Play();
+            playerAnimator.SetTrigger("Shoot");
+            flashAnimator.SetTrigger("Shoot");
+        }
+    }
+
+    IEnumerator StartShootingCooldown()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(shootingCooldown);
+        canShoot = true;
     }
 }
